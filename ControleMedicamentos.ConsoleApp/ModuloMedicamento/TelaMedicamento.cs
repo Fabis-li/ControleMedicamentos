@@ -129,7 +129,8 @@
             Console.WriteLine("Excluir de Medicamentos");
             Console.WriteLine("Excluindo um medicamento....");
             Console.WriteLine();
-            Console.WriteLine("Digite um ID do medicamento que deseja excluir: ");
+            ListarMedicamento(false);
+            Console.WriteLine("\nDigite um ID do medicamento que deseja excluir: ");
             int idMedicamento = Convert.ToInt32(Console.ReadLine());
 
             if (!repositorio.ExisteMedicamento(idMedicamento))

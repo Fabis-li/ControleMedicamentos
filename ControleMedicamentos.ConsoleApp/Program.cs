@@ -1,4 +1,5 @@
 ﻿using ControleMedicamentos.ConsoleApp.ModuloMedicamento;
+using ControleMedicamentos.ConsoleApp.ModuloPaciente;
 
 namespace ControleMedicamentos.ConsoleApp
 {
@@ -7,6 +8,7 @@ namespace ControleMedicamentos.ConsoleApp
         static void Main(string[] args)
         {
             TelaMedicamento telaMedicamento = new TelaMedicamento();
+            TelaPaciente telaPaciente = new TelaPaciente();
 
             bool opcaoSairEscolhida = false;
 
@@ -20,7 +22,7 @@ namespace ControleMedicamentos.ConsoleApp
                         char opMedicamento = telaMedicamento.ApresentarMenu();
 
                         if (opMedicamento == 'S' ||  opMedicamento == 's')
-                        break;
+                            break;
 
                         if (opMedicamento == '1')
                             telaMedicamento.CadastrarMedicamento();
@@ -35,7 +37,28 @@ namespace ControleMedicamentos.ConsoleApp
                             telaMedicamento.ExcluirMedicamento();
                         break;
 
+                    case '2':
+                        char opPaciente = telaPaciente.ApresentarMenu();
+
+                        if (opPaciente == 'S' || opPaciente == 's')
+                            break;
+
+                        if (opPaciente == '1')
+                            telaPaciente.CadastrarPaciente();
+
+                        else if (opPaciente == '2')
+                            telaPaciente.ListarPaciente(true);
+
+                        else if (opPaciente == '3')
+                            telaPaciente.EditarPaciente();
+
+                        else if (opPaciente == '4')
+                            telaPaciente.ExcluirPaciente();
+
+                        break;
+
                     default: opcaoSairEscolhida = true; break;
+
                 }
 
 

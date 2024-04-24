@@ -4,15 +4,24 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
 {
     public class Paciente
     {
-        private string Nome { get; set; }
-        private string Cpf { get; set; }
-        private string Endereco { get; set; }
-        private string CartaoSus { get; set; }
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public string Cpf { get; set; }
+        public string Endereco { get; set; }
+        public string CartaoSus { get; set; }
 
         public Requisicao Requisicao;
 
         public Paciente()
         {
+        }
+
+        public Paciente(string nome, string cpf, string endereco, string cartaoSus)
+        {           
+            Nome = nome;
+            Cpf = cpf;
+            Endereco = endereco;
+            CartaoSus = cartaoSus;
         }
     }
 }
