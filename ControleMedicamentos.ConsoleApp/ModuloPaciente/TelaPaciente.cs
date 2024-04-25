@@ -1,4 +1,4 @@
-﻿using ControleMedicamentos.ConsoleApp.ModuloMedicamento;
+﻿using ControleMedicamentos.ConsoleApp.Compartilhado;
 
 namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
 {
@@ -30,27 +30,25 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
             Console.Clear();
             Console.WriteLine("Cadastro de Pacientes");
             Console.WriteLine("Cadastrando um paciente....");
-            Console.WriteLine("\nDigite o nome do paciente: ");
-            string nome = Console.ReadLine();
-            Console.WriteLine("\nDigite o CPF do paciente: ");
-            string cpf = Console.ReadLine();
-            Console.WriteLine("\nDigite o endereço do paciente: ");
-            string endereco = Console.ReadLine();
-            Console.WriteLine("Digite o numero do cartão so sus: ");
-            string cartaoSus = Console.ReadLine();
 
-            //ToDo Requisição
+            Paciente paciente = ObterPaciente();
 
-            Paciente paciente = new Paciente(nome, cpf, endereco, cartaoSus);
+            string[] erros = paciente.Validar();
 
-            repositorio.CadastrarPaciente(paciente);
+            if (erros.Length > 0)
+            {
+                ApresentarErros(erros);
+                return;
+            }
+
+            repositorio.Cadastrar(paciente);
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nChamado cadastrado com sucesso!");
             Console.ResetColor();
 
             Console.ReadLine();
-        }
+        }        
 
         public void ListarPaciente(bool exibirTitulo)
         {
@@ -65,17 +63,15 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
             Console.WriteLine("{0, -10} | {1, -20} | {2, -15} | {3, -30} | {4, -20}",
                 "Id", "Nome", "CPF", "Endereço", "Número CartãoSUS");
 
-            Paciente[] pacienteCadastrados = repositorio.SelecionarPaciente();
+            Entidade[] pacienteCadastrados = repositorio.SelecionarTodos();
 
-            for (int i = 0; i < pacienteCadastrados.Length; i++)
+            foreach(Paciente paciente in pacienteCadastrados) 
             {
-                Paciente p = pacienteCadastrados[i];
-
-                if (p == null)
+                if (paciente == null)
                     continue;
 
                 Console.WriteLine("{0, -10} | {1, -20} | {2, -15} | {3, -30} | {4, -20}",
-                    p.Id, p.Nome, p.Cpf, p.Endereco, p.CartaoSus
+                    paciente.Id, paciente.Nome, paciente.Cpf, paciente.Endereco, paciente.CartaoSus
                 );
             }
 
@@ -95,7 +91,7 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
             Console.WriteLine("Digite um ID do paciente que deseja editar: ");
             int idPaciente = Convert.ToInt32(Console.ReadLine());
 
-            if (!repositorio.ExistePaciente(idPaciente))
+            if (!repositorio.Existe(idPaciente))
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("O paciente escolhido não existe");
@@ -104,18 +100,17 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
             }
             Console.WriteLine();
 
-            Console.WriteLine("\nDigite o nome do paciente: ");
-            string nome = Console.ReadLine();
-            Console.WriteLine("\nDigite o CPF do paciente: ");
-            string cpf = Console.ReadLine();
-            Console.WriteLine("\nDigite o endereço do paciente: ");
-            string endereco = Console.ReadLine();
-            Console.WriteLine("Digite o numero do cartão so sus: ");
-            string cartaoSus = Console.ReadLine();
+            Paciente novoPaciente = ObterPaciente();
 
-            Paciente novoPaciente = new Paciente(nome, cpf, endereco, cartaoSus);
+            string[] erros = novoPaciente.Validar();
 
-            bool conseguiuEditar = repositorio.EditarPaciente(idPaciente, novoPaciente);
+            if (erros.Length > 0)
+            {
+                ApresentarErros(erros);
+                return;
+            }
+
+            bool conseguiuEditar = repositorio.Editar(idPaciente, novoPaciente);
 
             if (!conseguiuEditar)
             {
@@ -142,7 +137,7 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
             Console.WriteLine("\nDigite um ID do paciente que deseja excluir: ");
             int idPaciente = Convert.ToInt32(Console.ReadLine());
 
-            if (!repositorio.ExistePaciente(idPaciente))
+            if (!repositorio.Existe(idPaciente))
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("O medicamento escolhido não existe!");
@@ -150,7 +145,7 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
                 return;
             }
 
-            bool conseguiuExcluir = repositorio.ExcluirPaciente(idPaciente);
+            bool conseguiuExcluir = repositorio.Excluir(idPaciente);
 
             if (!conseguiuExcluir)
             {
@@ -167,5 +162,35 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
 
             Console.ReadLine();
         }
+
+        private Paciente ObterPaciente()
+        {
+            
+            Console.WriteLine("\nDigite o nome do paciente: ");
+            string nome = Console.ReadLine();
+            Console.WriteLine("\nDigite o CPF do paciente: ");
+            string cpf = Console.ReadLine();
+            Console.WriteLine("\nDigite o endereço do paciente: ");
+            string endereco = Console.ReadLine();
+            Console.WriteLine("Digite o numero do cartão so sus: ");
+            string cartaoSus = Console.ReadLine();
+
+            //ToDo Requisição
+
+            Paciente paciente = new Paciente(nome, cpf, endereco, cartaoSus);
+
+            return paciente;
+        }
+        private void ApresentarErros(string[] erros)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            for (int i = 0; i < erros.Length; i++)
+                Console.WriteLine(erros[i]);
+
+            Console.ResetColor();
+            Console.ReadLine();
+        }
+
     }
 }

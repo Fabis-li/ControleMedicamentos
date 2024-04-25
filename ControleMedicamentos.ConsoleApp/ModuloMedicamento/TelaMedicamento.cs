@@ -1,4 +1,6 @@
-﻿namespace ControleMedicamentos.ConsoleApp.ModuloMedicamento
+﻿using ControleMedicamentos.ConsoleApp.Compartilhado;
+
+namespace ControleMedicamentos.ConsoleApp.ModuloMedicamento
 {
     public class TelaMedicamento
     {
@@ -24,19 +26,17 @@
 
         public void CadastrarMedicamento()
         {
-            Console.Clear();
-            Console.WriteLine("Cadastro de Medicamentos");
-            Console.WriteLine("Cadastrando um medicamento....");
-            Console.WriteLine("\nDigite o nome do medicamento: ");
-            string nome = Console.ReadLine();
-            Console.WriteLine("\nDigite a descrição do medicamento: ");
-            string descricao = Console.ReadLine();
-            Console.WriteLine("\nDigite a quantidade de entrada do medicamento: ");
-            int qtde = Convert.ToInt32(Console.ReadLine());
-                     
-            Medicamento medicamento = new Medicamento(nome, descricao, qtde);
+            Medicamento medicamento = obterMedicamento();
 
-            repositorio.CadastrarMedicamento(medicamento);
+            string[] erros = medicamento.Valdiar();
+
+            if(erros.Length > 0)
+            {
+                ApresentarErros(erros);
+                return;
+            }
+
+            repositorio.Cadastrar(medicamento);
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nChamado cadastrado com sucesso!");
@@ -44,6 +44,7 @@
 
             Console.ReadLine();
         }
+       
 
         public void ListarMedicamento(bool exibirTitulo)
         {
@@ -58,17 +59,15 @@
             Console.WriteLine("{0, -10} | {1, -20} | {2, -20} | {3, -10}",
                 "Id", "Nome", "Descrição", "Qtde");
 
-            Medicamento[] medicamentosCadastrados = repositorio.SeleconarMedicamentos();
+            Entidade[] medicamentosCadastrados = repositorio.SelecionarTodos();
 
-            for (int i = 0; i < medicamentosCadastrados.Length; i++)
+            foreach(Medicamento medicamento in medicamentosCadastrados)
             {
-                Medicamento m = medicamentosCadastrados[i];
-
-                if (m == null)
+                if (medicamento == null)
                     continue;
 
                 Console.WriteLine("{0, -10} | {1, -20} | {2, -20} | {3, -10}",
-                    m.Id, m.Nome, m.Descricao, m.Qtde
+                    medicamento.Id, medicamento.Nome, medicamento.Descricao, medicamento.Qtde
                 );
             }
 
@@ -88,7 +87,7 @@
             Console.WriteLine("Digite um ID do medicamento que deseja editar: ");
             int idMedicamento = Convert.ToInt32(Console.ReadLine());
 
-            if(!repositorio.ExisteMedicamento(idMedicamento))
+            if(!repositorio.Existe(idMedicamento))
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("O medicamento escolhido não existe");
@@ -97,16 +96,17 @@
             }
             Console.WriteLine();
 
-            Console.WriteLine("Digite o nome do medicamento: ");
-            string nome = Console.ReadLine();
-            Console.WriteLine("\nDigite a descrição do medicamento: ");
-            string descricao = Console.ReadLine();
-            Console.WriteLine("\nDigite a quantidade de entrada do medicamewnto: ");
-            int qtde = Convert.ToInt32(Console.ReadLine());
+            Medicamento medicamento = obterMedicamento();
 
-            Medicamento novoMedicamento = new Medicamento(nome, descricao, qtde);
+            string[] erros = medicamento.Valdiar();
 
-            bool conseguiuEditar = repositorio.EditarMedicamento(idMedicamento, novoMedicamento);
+            if (erros.Length > 0)
+            {
+                ApresentarErros(erros);
+                return;
+            }
+
+            bool conseguiuEditar = repositorio.Editar(idMedicamento, medicamento);
 
             if(!conseguiuEditar)
             {
@@ -133,7 +133,7 @@
             Console.WriteLine("\nDigite um ID do medicamento que deseja excluir: ");
             int idMedicamento = Convert.ToInt32(Console.ReadLine());
 
-            if (!repositorio.ExisteMedicamento(idMedicamento))
+            if (!repositorio.Existe(idMedicamento))
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("O medicamento escolhido não existe!");
@@ -141,7 +141,7 @@
                 return;
             }
 
-            bool conseguiuExcluir = repositorio.ExcluirMedicamento(idMedicamento);
+            bool conseguiuExcluir = repositorio.Excluir(idMedicamento);
 
             if (!conseguiuExcluir)
             {
@@ -156,6 +156,34 @@
             Console.WriteLine("Medicamento excluido com sucesso");
             Console.ResetColor();
 
+            Console.ReadLine();
+        }
+
+        private Medicamento obterMedicamento()
+        {
+            Console.Clear();
+            Console.WriteLine("Cadastro de Medicamentos");
+            Console.WriteLine("Cadastrando um medicamento....");
+            Console.WriteLine("\nDigite o nome do medicamento: ");
+            string nome = Console.ReadLine();
+            Console.WriteLine("\nDigite a descrição do medicamento: ");
+            string descricao = Console.ReadLine();
+            Console.WriteLine("\nDigite a quantidade de entrada do medicamento: ");
+            int qtde = Convert.ToInt32(Console.ReadLine());
+
+            Medicamento medicamento = new Medicamento(nome, descricao, qtde);
+
+            return medicamento;
+        }
+
+        private void ApresentarErros(string[] erros)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            for (int i = 0; i < erros.Length; i++)
+                Console.WriteLine(erros[i]);
+
+            Console.ResetColor();
             Console.ReadLine();
         }
     }
