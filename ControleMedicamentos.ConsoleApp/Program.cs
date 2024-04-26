@@ -9,7 +9,8 @@ namespace ControleMedicamentos.ConsoleApp
         {
             TelaMedicamento telaMedicamento = new TelaMedicamento();
             TelaPaciente telaPaciente = new TelaPaciente();
-
+            TelaRequisicao telaRequisicao = new TelaRequisicao(); 
+            
             bool opcaoSairEscolhida = false;
 
             while (!opcaoSairEscolhida)
@@ -57,8 +58,26 @@ namespace ControleMedicamentos.ConsoleApp
 
                         break;
 
-                    default: opcaoSairEscolhida = true; break;
+                    case '3':
+                        char opRequisicao = telaRequisicao.ApresentarMenu();
 
+                        if (opRequisicao == 'S' || opRequisicao == 's')
+                            break;
+
+                        if (opRequisicao == '1')
+                            telaRequisicao.CadastrarRequisicao();
+
+                        else if (opRequisicao == '2')
+                            telaRequisicao.ListarRequisicao(true);
+
+                        else if (opRequisicao == '3')
+                            telaRequisicao.EditarRequisicao();
+
+                        else if (opRequisicao == '4')
+                            telaRequisicao.ExcluirRequisicao();
+
+                        break;
+                    default: opcaoSairEscolhida = true; break;
                 }
 
 

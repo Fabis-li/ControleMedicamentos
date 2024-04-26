@@ -6,6 +6,18 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
     {
         RepositorioRequisicao repositorio = new RepositorioRequisicao();
 
+        public TelaRequisicao()
+        {
+            Requisicao requisicaoTeste = new Requisicao(
+                new Paciente("João", "123.456.789-00", "Rua 1", "123456789"),
+                new Medicamento("Dipirona", "Dipirona sódica", "Genérico", 10),
+                5,
+                new DateTime(2021, 12, 31)
+             );
+
+            repositorio.Cadastrar(requisicaoTeste);
+        }
+
         TelaPaciente telaPaciente = null;
 
         public char ApresentarMenu()
