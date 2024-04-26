@@ -30,8 +30,8 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
         public void CadastrarRequisicao()
         {
             Console.Clear();
-            Console.WriteLine("Cadastro de Pacientes");
-            Console.WriteLine("Cadastrando um paciente....");
+            Console.WriteLine("Cadastro de Requisição");
+            Console.WriteLine("Cadastrando uma requisição....");
 
             Requisicao requisicao = ObterRequisicao();
 
@@ -52,11 +52,112 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
             Console.ReadLine();
         }
 
+        public void ListarRequisicao(bool exibirTitulo)
+        {
+            if(exibirTitulo)
+            {
+                Console.Clear();
+                Console.WriteLine("Lista de Requisições");
+                Console.WriteLine("Listando as requisições....");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("{0, -10} | {1, -20} | {2, -20} | {3, -10}",
+                "Id", "Paciente", "Medicamento", "Qtde");
+
+            Entidade[] requisicoesCadastradas = repositorio.SelecionarTodos();
+
+            foreach (Requisicao requisicao in requisicoesCadastradas)
+            {
+                if (requisicao == null)
+                    continue;
+
+                Console.WriteLine("{0, -10} | {1, -20} | {2, -20} | {3, -10}",
+                    requisicao.Id, requisicao.Paciente.Nome, requisicao.Medicamento.Nome, requisicao.Qtde);
+            }
+
+            Console.ReadLine();
+            Console.WriteLine();
+        }
+
+        public void EditarRequisicao()
+        {
+            Console.Clear();
+            Console.WriteLine("Editar Requisição");
+            Console.WriteLine("Editando uma requisição....");
+
+            VisualizarRequisicao(false);
+
+            Console.WriteLine("Digite o Id da requisição que deseja editar: ");
+            int idReqiusicao = Convert.ToInt32(Console.ReadLine());
+
+            if(!RepositorioRequisicao.Existe(idReqiusicao))
+            {
+                Console.WriteLine("Requisição não encontrada");
+                Console.ReadLine();
+                return;
+            }
+
+            Console.WriteLine();
+
+            Requisicao requisicao = ObterRequisicao();
+
+            string[] erros = requisicao.Validar();
+
+            if (erros.Length > 0)
+            {
+                ApresentarErros(erros);
+                return;
+            }
+
+            bool conseguiuEditar = repositorio.Editar(idReqiusicao, requisicao);
+
+            if(!conseguiuEditar)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("\nRequisição não encontrada");
+                Console.ResetColor();
+            }
+           
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nRequisição editada com sucesso!");
+            Console.ResetColor();
+        }
+
+        public void ExcluirRequisicao()
+        {
+            Console.Clear();
+            Console.WriteLine("Excluir Requisição");
+            Console.WriteLine("Excluindo uma requisição....");
+
+            VisualizarRequisicao(false);
+
+            Console.WriteLine("Digite o Id da requisição que deseja excluir: ");
+            int idReqiusicao = Convert.ToInt32(Console.ReadLine());
+
+            if (!RepositorioRequisicao.Existe(idReqiusicao))
+            {
+                Console.WriteLine("Requisição não encontrada");
+                Console.ReadLine();
+                return;
+            }
+
+            bool conseguiuExcluir = repositorio.Excluir(idReqiusicao);
+
+            if (!conseguiuExcluir)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("\nRequisição não encontrada");
+                Console.ResetColor();
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nRequisição excluída com sucesso!");
+            Console.ResetColor();
+        }
+
         private Requisicao ObterRequisicao()
         {
-           
-            //Todo Vizualizar Pacientes
-
             telaPaciente.ListarPaciente(false);
 
             bool conseguiuConverter = false;
@@ -72,15 +173,30 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
                     Console.WriteLine("Por favor, informe umm Id válido\n");
 
             }
+
+            Paciente pacienteSelecionadao = (Paciente)telaPaciente.SelecionarPorId(idPaciente);
             
-            Console.WriteLine("\nDigite o Id do medicamento: ");
-            int idMedicamento = Convert.ToInt32(Console.ReadLine());
+            telaMedicamento.ListarMedicamento(false);
+
+            bool conseguiuConverterMedicamento = false;
+
+            int idMedicamento = 0;
+
+            while(!conseguiuConverterMedicamento)
+            {
+                Console.WriteLine("\nDigite o Id do medicamento: ");
+                conseguiuConverterMedicamento = int.TryParse(Console.ReadLine(), out idMedicamento);
+
+                if (!conseguiuConverterMedicamento)
+                    Console.WriteLine("Por favor, informe um Id válido\n");
+            }
+
+            Medicamento medicamentoSelecionado = (Medicamento)telaMedicamento.SelecionarPorId(idMedicamento);
+
             Console.WriteLine("\nDigite digite a quantidade do medicamento: ");
             int qtde = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Digite a validade da Requisição: ");
             DateTime dataValidade = Convert.ToDateTime(Console.ReadLine());
-            
-
 
             Requisicao requisicao = new Requisicao();
 
