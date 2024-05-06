@@ -5,6 +5,14 @@ namespace ControleMedicamentos.ConsoleApp.ModuloMedicamento
     public class TelaMedicamento
     {
         RepositorioMedicamento repositorio = new RepositorioMedicamento();
+
+        public void telaMedicamento()
+        {
+            Medicamento medicamentoTeste = new Medicamento("Dipirona", "Analgésico", 100);
+
+            repositorio.Cadastrar(medicamentoTeste);
+        }
+
         public char ApresentarMenu()
         {
             Console.Clear();

@@ -6,6 +6,13 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
     {
         RepositorioPaciente repositorio = new RepositorioPaciente();
 
+        public TelaPaciente()
+        {
+            Paciente pacienteTeste = new Paciente("João", "123.456.789-00", "Rua 1", "123456789");
+
+            repositorio.Cadastrar(pacienteTeste);
+        }
+
         public char ApresentarMenu()
         {
             Console.Clear();
