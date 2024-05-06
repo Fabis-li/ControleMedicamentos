@@ -1,18 +1,18 @@
 ﻿namespace ControleMedicamentos.ConsoleApp.Compartilhado
 {
-    public class Repositorio
+    public class RepositorioBase
     {
-        protected Entidade[] registros = new Entidade[100];
+        protected EntidadeBase[] registros = new EntidadeBase[100];
         protected int contadorId = 1;
 
-        public void Cadastrar(Entidade novoRegistro)
+        public void Cadastrar(EntidadeBase novoRegistro)
         {
             novoRegistro.Id = contadorId;
 
             Registrar(novoRegistro);
         }        
 
-        public bool Editar(int id, Entidade novoRegistro)
+        public bool Editar(int id, EntidadeBase novoRegistro)
         {
             novoRegistro.Id = id;
 
@@ -42,16 +42,16 @@
             return false;
         }       
 
-        public Entidade[] SelecionarTodos()
+        public EntidadeBase[] SelecionarTodos()
         {
             return registros;
         }
 
-        public Entidade SelecionarPorId(int id)
+        public EntidadeBase SelecionarPorId(int id)
         {
             for (int i = 0; i < registros.Length; i++)
             {
-                Entidade e = registros[i];
+                EntidadeBase e = registros[i];
 
                 if (e == null)
                     continue;
@@ -66,7 +66,7 @@
         {
             for (int i = 0; i < registros.Length; i++)
             {
-                Entidade e = registros[i];
+                EntidadeBase e = registros[i];
 
                 if (e == null)
                     continue;
@@ -77,7 +77,7 @@
             return false;
         }
 
-        public void Registrar(Entidade novoRegistro)
+        public void Registrar(EntidadeBase novoRegistro)
         {
             for (int i = 0; i < registros.Length; i++)
             {

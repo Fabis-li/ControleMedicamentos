@@ -54,9 +54,6 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
 
         private Requisicao ObterRequisicao()
         {
-           
-            //Todo Vizualizar Pacientes
-
             telaPaciente.ListarPaciente(false);
 
             bool conseguiuConverter = false;
@@ -70,7 +67,6 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
 
                 if (!conseguiuConverter)
                     Console.WriteLine("Por favor, informe umm Id válido\n");
-
             }
             
             Console.WriteLine("\nDigite o Id do medicamento: ");
@@ -78,9 +74,7 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
             Console.WriteLine("\nDigite digite a quantidade do medicamento: ");
             int qtde = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Digite a validade da Requisição: ");
-            DateTime dataValidade = Convert.ToDateTime(Console.ReadLine());
-            
-
+            DateTime dataValidade = Convert.ToDateTime(Console.ReadLine());  
 
             Requisicao requisicao = new Requisicao();
 

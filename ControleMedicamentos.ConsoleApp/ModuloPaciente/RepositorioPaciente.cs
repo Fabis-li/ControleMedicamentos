@@ -3,7 +3,7 @@ using ControleMedicamentos.ConsoleApp.ModuloMedicamento;
 
 namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
 {
-    public class RepositorioPaciente : Repositorio
+    public class RepositorioPaciente : RepositorioBase
     {
        
     }

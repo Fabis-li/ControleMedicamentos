@@ -2,7 +2,7 @@
 
 namespace ControleMedicamentos.ConsoleApp.ModuloMedicamento
 {
-    public class Medicamento :Entidade    {
+    public class Medicamento :EntidadeBase    {
       
         public string Nome { get; set; }
         public string Descricao { get; set; }
@@ -17,37 +17,33 @@ namespace ControleMedicamentos.ConsoleApp.ModuloMedicamento
             Nome = nome;
             Descricao = descricao;
             Qtde = qtde;
-        }
+        }       
 
-        public string[] Valdiar()
+        public override string[] Validar()
         {
             string[] erros = new string[3];
             int contadorErros = 0;
 
             if (string.IsNullOrEmpty(Nome))
             {
-                erros[0] = "O nome é obrigatório";
-                contadorErros++;
+                erros[contadorErros++] = "O nome é obrigatório";                
             }
 
             if (string.IsNullOrEmpty(Descricao))
             {
-                erros[1] = "A descrição é obrigatória";
-                contadorErros++;
+                erros[contadorErros++] = "A descrição é obrigatória";                
             }
 
             if (Qtde <= 0)
             {
-                erros[2] = "A quantidade inserida não pode ser menor ou igual a zero";
-                contadorErros++;
-            }            
+                erros[contadorErros++] = "A quantidade inserida não pode ser menor ou igual a zero";               
+            }
 
             string[] errosFiltrados = new string[contadorErros];
 
             Array.Copy(erros, errosFiltrados, contadorErros);
 
             return errosFiltrados;
-
         }
     }
 }

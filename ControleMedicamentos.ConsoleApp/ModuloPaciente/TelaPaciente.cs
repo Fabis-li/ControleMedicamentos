@@ -63,7 +63,7 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
             Console.WriteLine("{0, -10} | {1, -20} | {2, -15} | {3, -30} | {4, -20}",
                 "Id", "Nome", "CPF", "Endereço", "Número CartãoSUS");
 
-            Entidade[] pacienteCadastrados = repositorio.SelecionarTodos();
+            EntidadeBase[] pacienteCadastrados = repositorio.SelecionarTodos();
 
             foreach(Paciente paciente in pacienteCadastrados) 
             {

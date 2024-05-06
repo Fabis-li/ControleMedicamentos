@@ -4,7 +4,7 @@ using ControleMedicamentos.ConsoleApp.ModuloPaciente;
 
 namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
 {
-    public class Requisicao : Entidade
+    public class Requisicao : EntidadeBase
     {        
         Paciente Paciente { get; set; }
         Medicamento Medicamento { get; set; }
@@ -22,8 +22,8 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
             Qtde = qtde;
             DataValidade = dataValidade;
         }
-
-        public string[] Validar()
+        
+        public override string[] Validar()
         {
             string[] erros = new string[3];
             int contadorErros = 0;
@@ -31,28 +31,24 @@ namespace ControleMedicamentos.ConsoleApp.ModuloRequisicao
 
             if (Paciente == null)
             {
-                erros[0] = "O Paciente é obrigatório.";
-                contadorErros++;
+                erros[contadorErros++] = "O Paciente é obrigatório.";               
             }
 
             if (Medicamento == null)
             {
-                erros[1] = "O medicamento é obrigatório.";
-                contadorErros++;
+                erros[contadorErros++] = "O medicamento é obrigatório.";               
             }
 
             if (Qtde <= 0)
             {
-                erros[2] = "A quantiadde dever ser maior do que zero.";
-                contadorErros++;
-            }            
+                erros[contadorErros++] = "A quantiadde dever ser maior do que zero.";                
+            }
 
             string[] errosFiltrados = new string[contadorErros];
 
             Array.Copy(erros, errosFiltrados, contadorErros);
 
             return errosFiltrados;
-
         }
     }
 }

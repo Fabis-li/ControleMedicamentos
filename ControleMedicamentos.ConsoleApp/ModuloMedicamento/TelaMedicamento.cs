@@ -8,7 +8,6 @@ namespace ControleMedicamentos.ConsoleApp.ModuloMedicamento
         public char ApresentarMenu()
         {
             Console.Clear();
-            Console.Clear();
             Console.WriteLine("Gestão Medicamentos");
             Console.WriteLine("----------------------\n");
             Console.WriteLine("1 - Cadastrar Medicamento");
@@ -59,7 +58,7 @@ namespace ControleMedicamentos.ConsoleApp.ModuloMedicamento
             Console.WriteLine("{0, -10} | {1, -20} | {2, -20} | {3, -10}",
                 "Id", "Nome", "Descrição", "Qtde");
 
-            Entidade[] medicamentosCadastrados = repositorio.SelecionarTodos();
+            EntidadeBase[] medicamentosCadastrados = repositorio.SelecionarTodos();
 
             foreach(Medicamento medicamento in medicamentosCadastrados)
             {

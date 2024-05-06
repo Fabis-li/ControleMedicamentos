@@ -3,7 +3,7 @@ using ControleMedicamentos.ConsoleApp.ModuloRequisicao;
 
 namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
 {
-    public class Paciente : Entidade
+    public class Paciente : EntidadeBase
     {        
         public string Nome { get; set; }
         public string Cpf { get; set; }
@@ -16,41 +16,38 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
         {
         }
 
-        public Paciente(string nome, string cpf, string endereco, string cartaoSus)
+        public Paciente(string nome, string cpf, string endereco, string cartaoSus, Requisicao requisicao)
         {           
             Nome = nome;
             Cpf = cpf;
             Endereco = endereco;
             CartaoSus = cartaoSus;
-            // Requisicao
-        }
+            Requisicao = requisicao;
+        }       
 
-        public string[] Validar()
+        public override string[] Validar()
         {
             string[] erros = new string[4];
             int contadorErros = 0;
 
             if (string.IsNullOrEmpty(Nome))
             {
-                erros[0] = "O nome é obrigatório";
-                contadorErros++;
+                erros[contadorErros++] = "O nome é obrigatório";                
             }
 
             if (string.IsNullOrEmpty(Cpf))
             {
-                erros[1] = "O CPF é obrigatório";
-                contadorErros++;
+                erros[contadorErros++] = "O CPF é obrigatório";               
             }
 
             if (string.IsNullOrEmpty(Endereco))
             {
-                erros[2] = "O Endereço é obrigatório!";
-                contadorErros++;
+                erros[contadorErros++] = "O Endereço é obrigatório!";               
             }
 
             if (string.IsNullOrEmpty(CartaoSus))
             {
-                erros[3] = "O número do cartão é obrigatório";
+                erros[contadorErros++] = "O número do cartão é obrigatório";
             }
 
             string[] errosFiltrados = new string[contadorErros];
@@ -58,7 +55,6 @@ namespace ControleMedicamentos.ConsoleApp.ModuloPaciente
             Array.Copy(erros, errosFiltrados, contadorErros);
 
             return errosFiltrados;
-
         }
     }
 }
